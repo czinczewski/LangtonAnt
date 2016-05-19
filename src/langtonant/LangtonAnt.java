@@ -38,14 +38,19 @@ public class LangtonAnt {
     ActionListener actionListener = new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent e){
+            long aSteps;
+            long aStepsToJump;
+            
             if(e.getSource() == Start){
                 //
             }else if(e.getSource() == Stop){
                 //
             }else if(e.getSource() == AddingAnt){
                 //
-            }else if(e.getSource() == GoTo){
-                //Przeskok o ilość kroków
+            }else if(e.getSource() == GoTo){ //Przeskok o ilość kroków - do wyrysowania na raz jakiejś liczby kroków
+                aSteps = Long.parseLong(Counter.getText());    
+                aStepsToJump = Long.parseLong(AddingSteps.getText());
+                Counter.setText(String.valueOf(aSteps += aStepsToJump));
             }
         }
     };
