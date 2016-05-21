@@ -33,19 +33,20 @@ public class LangtonAnt {
 
     public static void main(String[] args) {
            new LangtonAnt().show();
+    }
 
-    }    
+    
     ActionListener actionListener = new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent e){
             long aSteps;
             long aStepsToJump;
             
-            if(e.getSource() == Start){
+            if(e.getSource() == Start){ //Start wyrysowywania
                 //
-            }else if(e.getSource() == Stop){
+            }else if(e.getSource() == Stop){ //Zatrzymanie wyrysowywania
                 //
-            }else if(e.getSource() == AddingAnt){
+            }else if(e.getSource() == AddingAnt){ //Dodawanie mrówki
                 //
             }else if(e.getSource() == GoTo){ //Przeskok o ilość kroków - do wyrysowania na raz jakiejś liczby kroków
                 aSteps = Long.parseLong(Counter.getText());    
@@ -75,8 +76,9 @@ public class LangtonAnt {
  
     // create controls to apply colors and call clear feature
     JPanel controls = new JPanel();
-    controls.setLocation(0, 0);
-    controls.setSize(120, 900);
+    GridBagLayout layout = new GridBagLayout();
+ //   controls.setLocation(0, 0);
+ //   controls.setSize(120, 900);
         
     Start = new JButton("START");
         Start.addActionListener(actionListener);
@@ -114,7 +116,7 @@ public class LangtonAnt {
     controls.add(AddingSteps);
     controls.add(StepLabel);
     
-    content.add(controls, BorderLayout.WEST);    
+    content.add(controls, BorderLayout.EAST);    
     frame.setVisible(true);
     }
 }
