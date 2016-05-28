@@ -5,131 +5,193 @@
  */
 package langtonant;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Container;
-import java.awt.Dimension;
-import java.awt.GridBagLayout;
-import java.awt.GridLayout;
-import java.awt.Toolkit;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.TimerTask;
 
 import javax.swing.*;
+import javax.swing.border.MatteBorder;
+
 
 /**
  *
- * @author Aleksandra Wyszecka
- * @author Damian Winczewski
+ * @author Aleksandra
  */
-
-
 public class LangtonAnt {
-    //INICJALIZACJA CONTROLOWANIA
-        JButton Start, Stop, AddingAnt, GoTo;
-        JTextField Counter, AddingSteps;
-        JLabel StepLabel;
-        DrawArea drawArea;
 
     public static void main(String[] args) {
-           new LangtonAnt().show();
+        new Window();
     }
-
     
-    ActionListener actionListener = new ActionListener() {
-        @Override
-        public void actionPerformed(ActionEvent e){
-            long aSteps;
-            long aStepsToJump;
-            
-            if(e.getSource() == Start){ //Start wyrysowywania
-                //
-            }else if(e.getSource() == Stop){ //Zatrzymanie wyrysowywania
-                //
-            }else if(e.getSource() == AddingAnt){ //Dodawanie mrówki
-                //
-            }else if(e.getSource() == GoTo){ //Przeskok o ilość kroków - do wyrysowania na raz jakiejś liczby kroków
-                aSteps = Long.parseLong(Counter.getText());    
-                aStepsToJump = Long.parseLong(AddingSteps.getText());
-                Counter.setText(String.valueOf(aSteps += aStepsToJump));
+    private Timer zegar;
+    public boolean StartRys = false;
+    
+    class Dzialanie extends TimerTask{
+        public void run(){
+            if(StartRys){
+                
+            }else{
+                //nic nie robie
             }
         }
-    };
+    }
     
-    public void show(){
-        JFrame frame = new JFrame("LangtonAnt");       
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    //FULLSCREEN
-        Toolkit kit = Toolkit.getDefaultToolkit();
-        Dimension screenSize = kit.getScreenSize();
-        final int screenWidth = screenSize.width;       
-        final int screenHeight = screenSize.height;                
-        frame.setSize(screenWidth, screenHeight);
+    public class Ant{
+        private final int wsp[] = new int[2];
         
-        Container content = frame.getContentPane();
-        content.setLayout(new BorderLayout());
-    // create draw area
-        drawArea = new DrawArea(content);
- 
-    // add to content pane
-        content.add(drawArea, BorderLayout.CENTER);
- 
-    // create controls to apply colors and call clear feature
-    JPanel controls = new JPanel();
-    GridBagLayout layout = new GridBagLayout();
- //   controls.setLocation(0, 0);
- //   controls.setSize(120, 900);
         
-    Start = new JButton("START");
-        Start.addActionListener(actionListener);
-    Stop = new JButton("STOP");
-        Stop.addActionListener(actionListener);
-    AddingAnt = new JButton("ADD ANT");
-        AddingAnt.addActionListener(actionListener);
-    GoTo = new JButton("DO STEPS");
-        GoTo.addActionListener(actionListener);
+    }
+}
 
-    Counter = new JTextField(10); 
-        Counter.setText(String.valueOf(0));
-    AddingSteps = new JTextField(10);
+class Window extends LangtonAnt{
+   // private JButton przyciski[];
+    
+    JButton Start = new JButton("START"); // zamiat tego bedzie trzba zrobić tablice wszystkich przycisków 
+                                           // by w tej klasie nie było śmieci
+    
+        Window(){
 
-    StepLabel = new JLabel("STEPS: ");    
-
-    //Przyciski
-        Start.setBounds(10, 10, 100, 40);
-        Stop.setBounds(10, 60, 100, 40);
-    //Licznik kroków
-        StepLabel.setBounds(40, 100, 50, 30);                     
-        Counter.setBounds(10, 130, 100, 30);
-    //Dodawanie mrówki    
-        AddingAnt.setBounds(10, 170, 100, 40);
+            JFrame frame = new JFrame("Langton Ant");
             
-    //przeskok o liczbę kroków
-        AddingSteps.setBounds(10, 220, 100, 30);           
-        GoTo.setBounds(10, 260, 100, 40);
+            Toolkit kit = Toolkit.getDefaultToolkit();
+            Dimension screenSize = kit.getScreenSize();
+            final int screenWidth = screenSize.width;       
+            final int screenHeight = screenSize.height;                
+            frame.setSize(screenWidth, screenHeight);
+            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            frame.setLayout(new BorderLayout());
+            
+            frame.add(new Panel(), BorderLayout.LINE_START);
+            frame.add(new Buttons());
+
+            frame.setVisible(true);
+            }
+
+    public class Buttons extends JPanel{
+
+
+            JButton Stop = new JButton("STOP");
+            JButton AddAnt = new JButton("ADD ANT");
+            JButton GoTo = new JButton("DO STEPS");
+            JTextField Counter = new JTextField(10); 
+            JTextField AddSteps = new JTextField(10);
+            JLabel StepLabel = new JLabel("STEPS: ");
+            
+        public void Buttons(){
+            Start.addActionListener(new ObslugaPrzycisku(this));
+            // TO MI NIE DZIAŁA !!
+            
+            setLayout(null);
+            add(Start);
+            add(Stop);
+            add(AddAnt);
+            add(GoTo);
+            add(Counter);
+            add(AddSteps);
+            add(StepLabel); 
+            
+        //Przyciski
+            Start.setBounds(10, 10, 100, 40);
+            Stop.setBounds(10, 60, 100, 40);
+        //Licznik kroków
+            StepLabel.setBounds(40, 100, 50, 30);                     
+            Counter.setBounds(10, 130, 100, 30);
+        //Dodawanie mrówki    
+            AddAnt.setBounds(10, 170, 100, 40);
+            
+        //przeskok o liczbę kroków
+            AddSteps.setBounds(10, 220, 100, 30);           
+            GoTo.setBounds(10, 260, 100, 40);
+            
+        }
+    }
     
-    controls.add(Start);
-    controls.add(Stop);
-    controls.add(AddingAnt);
-    controls.add(GoTo);
-    controls.add(Counter);
-    controls.add(AddingSteps);
-    controls.add(StepLabel);
+    private class ObslugaPrzycisku implements ActionListener{
+        private JFrame ref_okno;
+        
+        ObslugaPrzycisku(JFrame okno){
+            ref_okno = okno;
+        }
+        
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            JButton bt = (JButton)e.getSource();
+            if(bt == Start){
+                StartRys = true;
+            }
+            
+        }
+    }
     
-    content.add(controls, BorderLayout.EAST);    
-    frame.setVisible(true);
+    public class Panel extends JPanel {
+
+        public Panel() {
+            setLayout(new GridBagLayout());
+            
+            GridBagConstraints grid = new GridBagConstraints();
+            for (int row = 0; row < 60; row++) {
+                for (int column = 0; column < 110; column++) {
+                    grid.gridx = column;
+                    grid.gridy = row;
+
+                    CellPane cellPane = new CellPane();
+                    
+                    MatteBorder border = null;
+                    if (row < 59) {
+                        if (column < 109) {
+                            border = new MatteBorder(1, 1, 0, 0, Color.BLACK);
+                        } else {
+                            border = new MatteBorder(1, 1, 0, 1, Color.BLACK);
+                        }
+                    } else {
+                        if (column < 109) {
+                            border = new MatteBorder(1, 1, 1, 0, Color.BLACK);
+                        } else {
+                            border = new MatteBorder(1, 1, 1, 1, Color.BLACK);
+                        }
+                    }
+                    cellPane.setBorder(border);
+                    add(cellPane, grid);
+                }
+            }
+        }
+    }
+
+    public class CellPane extends JPanel {
+
+        private Color cellColor;
+        
+        public CellPane() {
+                setBackground(Color.WHITE);
+                
+                addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseEntered(MouseEvent e) {
+                    cellColor = getBackground();
+                    if(cellColor == Color.WHITE )setBackground(Color.BLACK);
+                    if(cellColor == Color.BLACK )setBackground(Color.WHITE);
+                }
+
+                public void mouseExited(MouseEvent e) {
+                    setBackground(cellColor);
+                }
+                
+                public void mouseClicked(MouseEvent e) {
+                    cellColor = getBackground();
+                    if(cellColor == Color.WHITE )setBackground(Color.BLACK);
+                    if(cellColor == Color.BLACK )setBackground(Color.WHITE);
+                }
+            });
+        }
     }
 }
 
-class DrawArea extends JComponent{
-    DrawArea(Container content){
-        JPanel panel = new JPanel();
-        panel.setBackground(Color.BLACK);
-        panel.setBounds(100,100,100,100);
-        panel.setVisible(true);
-        GridBagLayout layout = new GridBagLayout();
-        panel.setLayout(layout);
-        content.add(panel);
-    }
-}
+
+
+
 
